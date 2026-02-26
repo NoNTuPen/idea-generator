@@ -1,0 +1,236 @@
+/* style.css */
+
+/* Сброс отступов и базовые настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  /* Шапка на всю ширину */
+  header {
+    width: 100%;
+    background-color: #2d1b4a; /* базовый темно-фиолетовый */
+    background-image: radial-gradient(circle at 0% 100%, rgba(64, 93, 230, 0.5) 0%, transparent 50%),
+                      radial-gradient(circle at 100% 100%, rgba(255, 120, 200, 0.5) 0%, transparent 50%);
+    color: white;
+    padding: 20px 16px 16px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* Заголовки в левом верхнем углу */
+  .header--container-top {
+    margin-bottom: 8px; /* уменьшенный отступ */
+  }
+  
+  .header--container-top-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 2px; /* минимальный отступ между строками */
+    line-height: 1.2;
+  }
+  
+  .header--container-top-description {
+    font-size: 16px;
+    opacity: 0.9;
+    display: inline-block;
+  }
+  
+  /* Счетчик идей */
+  #idea_count {
+    font-weight: bold;
+    margin-left: 4px;
+  }
+  
+  /* Контейнер для кнопок в нижней части шапки */
+  .header--container-bottom {
+    margin-top: 24px; /* отступ от верхней части */
+  }
+  
+  /* Список кнопок */
+  .header--container-bottom-selector {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  /* Элементы списка - первые две кнопки в одной строке */
+  .header--selector-li {
+    flex: 1 1 calc(50% - 4px); /* первые две занимают по половине ширины с учетом gap */
+    min-width: 0; /* предотвращает переполнение */
+  }
+  
+  /* Третья кнопка на отдельной строке */
+  .header--selector-li:last-child {
+    flex: 1 1 100%;
+    margin-top: 0;
+  }
+  
+  /* Стили кнопок */
+  .header--selector-button {
+    width: 100%;
+    padding: 14px 0;
+    background-color: rgba(255, 255, 255, 0.9); /* белый с прозрачностью */
+    border: none;
+    border-radius: 8px; /* скругленные края как на скриншоте */
+    color: #2d1b4a; /* темно-фиолетовый цвет текста */
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.3px;
+  }
+  
+  /* Эффект при нажатии */
+  .header--selector-button:active {
+    transform: scale(0.98);
+    background-color: rgba(255, 255, 255, 1);
+  }
+  
+  /* Основной контент */
+  main {
+    padding: 24px 16px;
+  }
+  
+  /* Контейнеры для разных разделов */
+  .main--container {
+    display: none; /* скрыты по умолчанию */
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .main--container.active {
+    display: block; /* активный показываем */
+  }
+  
+  /* Заголовки h3 */
+  h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  
+  /* Стили для форм */
+  .main--container-add-form,
+  .main--container-all-ideas-form,
+  .main--container-generate-idea-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Поле ввода */
+  .input {
+    width: 100%;
+    min-height: 80px;
+    max-height: 300px; /* ограничение максимальной высоты */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical; /* пользователь может менять высоту */
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .input:focus {
+    border-color: #2d1b4a; /* фиолетовый в фокусе */
+  }
+  
+  .input::placeholder {
+    color: #aaa;
+  }
+  
+  /* Сообщение об ошибке */
+  .exeption {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-bottom: 12px;
+    display: none; /* скрыто по умолчанию */
+  }
+  
+  /* Кнопка подтверждения */
+  .main--container-button {
+    width: 100%;
+    padding: 14px 0;
+    background-color: #2d1b4a;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+  }
+  
+  .main--container-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  /* Список всех идей */
+  .all-ideas-list {
+    list-style-position: inside;
+    padding: 8px 0;
+  }
+  
+  .all-ideas-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .all-ideas-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .used-list li {
+    background-color: #f5f5f5;
+    color: #666;
+  }
+  
+  .used-list li .delete-btn {
+    color: #999;
+  }
+
+  /* Сгенерированная идея */
+  .generated-idea {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+    padding: 16px;
+    background-color: #f9f0ff;
+    border-radius: 8px;
+    margin: 16px 0;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Корректировка отступов для кнопки в генераторе */
+  #generate_idea_button_conf {
+    margin-top: 16px;
+  }

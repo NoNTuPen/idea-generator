@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title></title>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header--container">
+          <div class="header--container-top">
+            <h1 class="header--container-top-name">Идеи</h1>
+            <span class="header--container-top-description">записано идей: </span>
+            <span id="idea_count" class="header--container-top-description">0</span>
+          </div>
+          <div class="header--container-bottom">
+            <ul class="header--container-bottom-selector">
+              <li class="header--selector-li"><button id="add_idea_button" class="header--selector-button">Добавить идею</button></li>
+              <li class="header--selector-li"><button id="all_ideas_list_button" class="header--selector-button">Все идеи</button></li>
+              <li class="header--selector-li"><button id="generate_idea_button" class="header--selector-button">Получить идею</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div id="add_idea_container" class="main--container active">
+          <div class="main--container-add-form">
+            <h3>Впишите свою идею</h3>
+            <textarea id="idea_input" class="input auto-resize" placeholder="Введите вашу идею..." rows="4"></textarea>
+            <span class="exeption">*ошибка заполнения</span>
+            <button id="add_idea_button_conf" class="main--container-button">Вписать</button>
+          </div>
+        </div>
+
+        <div id="all_ideas_list_container" class="main--container">
+          <div class="main--container-all-ideas-form">
+            <h3>Активные идеи</h3>
+            <ol id="active-ideas-list" class="all-ideas-list"></ol>
+        
+            <h3 style="margin-top: 30px;">Использованные идеи</h3>
+            <ol id="used-ideas-list" class="all-ideas-list used-list"></ol>
+          </div>
+        </div>
+
+        <div id="generate_idea_container" class="main--container">
+          <div class="main--container-generate-idea-form">
+            <h3>Идея для вас</h3>
+            <span class="generated-idea"></span>
+            <button id="generate_idea_button_conf" class="main--container-button">Получить случайную</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <script src="logic.js"></script>
+  </body>
+</html>
