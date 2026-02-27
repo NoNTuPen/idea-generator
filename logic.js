@@ -83,7 +83,7 @@ if (addIdeaBtn) {
 if (allIdeasBtn) {
     allIdeasBtn.addEventListener('click', () => {
         showSection(allIdeasContainer);
-        renderAllLists(); // обновляем оба списка
+        renderAllLists();
     });
 }
 
@@ -108,14 +108,13 @@ function renderActiveIdeas() {
         return;
     }
     
-    // Сортируем от новых к старым
     const sorted = [...ideas].sort((a, b) => b.id - a.id);
     
     activeIdeasList.innerHTML = sorted.map(idea => `
         <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
             <span style="flex: 1;">${idea.text}</span>
-            <span style="font-size: 12px; color: #999; margin-right: 10px;">${idea.created}</span>
-            <button onclick="deleteIdea(${idea.id})" class="delete-btn" style="background: none; border: none; color: #d32f2f; font-size: 20px; cursor: pointer; padding: 0 5px;">&times;</button>
+            <span style="font-size: 14px; color: #999; margin-right: 10px;">${idea.created}</span>
+            <button onclick="deleteIdea(${idea.id})" class="delete-btn">&times;</button>
         </li>
     `).join('');
 }
@@ -129,19 +128,20 @@ function renderUsedIdeas() {
         return;
     }
     
-    // Сортируем от новых к старым (по дате использования)
     const sorted = [...usedIdeas].sort((a, b) => new Date(b.usedAt) - new Date(a.usedAt));
     
     usedIdeasList.innerHTML = sorted.map(idea => `
         <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; background-color: #f9f9f9;">
             <span style="flex: 1;">${idea.text}</span>
-            <span style="font-size: 12px; color: #999; margin-right: 10px;" title="Использовано: ${idea.usedAt}">${idea.usedAt}</span>
-            <button onclick="deleteUsedIdea(${idea.id})" class="delete-btn" style="background: none; border: none; color: #999; font-size: 20px; cursor: pointer; padding: 0 5px;">&times;</button>
+            <span style="font-size: 14px; color: #999; margin-right: 10px;" title="Использовано: ${idea.usedAt}">${idea.usedAt}</span>
+            <div class="action-buttons">
+                <button onclick="restoreIdea(${idea.id})" class="restore-btn" title="Восстановить">↻</button>
+                <button onclick="deleteUsedIdea(${idea.id})" class="delete-btn" title="Удалить">&times;</button>
+            </div>
         </li>
     `).join('');
 }
 
-// Общий рендер обоих списков
 function renderAllLists() {
     renderActiveIdeas();
     renderUsedIdeas();
@@ -167,7 +167,6 @@ function addNewIdea() {
     updateIdeaCount();
     clearInput();
     
-    // Если открыт раздел со списками, обновляем их
     if (allIdeasContainer.classList.contains('active')) {
         renderAllLists();
     }
@@ -195,8 +194,7 @@ window.deleteIdea = function(id) {
         ideas = ideas.filter(idea => idea.id !== id);
         saveToStorage();
         updateIdeaCount();
-        renderActiveIdeas(); // обновляем только активные
-        // Если на вкладке генерации, обновляем кнопку
+        renderActiveIdeas();
         if (generateIdeaConfirmBtn) {
             generateIdeaConfirmBtn.textContent = ideas.length > 0 ? 'Получить случайную' : 'Нет идей';
         }
@@ -208,6 +206,30 @@ window.deleteUsedIdea = function(id) {
         usedIdeas = usedIdeas.filter(idea => idea.id !== id);
         saveToStorage();
         renderUsedIdeas();
+    }
+};
+
+// ============== ВОССТАНОВЛЕНИЕ ИДЕИ ==============
+
+window.restoreIdea = function(id) {
+    const index = usedIdeas.findIndex(idea => idea.id === id);
+    if (index !== -1) {
+        const idea = usedIdeas[index];
+        usedIdeas.splice(index, 1);
+        // Убираем поле usedAt, чтобы оно не мешалось в активных
+        const restoredIdea = { ...idea };
+        delete restoredIdea.usedAt;
+        ideas.push(restoredIdea);
+        
+        saveToStorage();
+        updateIdeaCount();
+        renderAllLists();
+        
+        if (generateIdeaConfirmBtn) {
+            generateIdeaConfirmBtn.textContent = ideas.length > 0 ? 'Получить случайную' : 'Нет идей';
+        }
+        
+        alert('Идея восстановлена!');
     }
 };
 
@@ -224,18 +246,16 @@ function showRandomIdea() {
     const randomIdea = getRandomIdea();
     
     if (!randomIdea) {
-        generatedIdeaSpan.innerHTML = '🎯 Нет активных идей';
+        generatedIdeaSpan.innerHTML = 'Нет активных идей';
         return;
     }
     
     generatedIdeaSpan.innerHTML = `
-        <div style="text-align: center;">
-            <p style="font-size: 18px; margin-bottom: 16px;">${randomIdea.text}</p>
-            <button onclick="moveToUsed(${randomIdea.id})" class="main--container-button" style="background-color: #4CAF50; width: auto; padding: 10px 20px;">
-                ✅ Использовать
-            </button>
-        </div>
-    `;
+  <div style="text-align: center;">
+    <p style="font-size: 18px; margin-bottom: 8px;">${randomIdea.text}</p>
+    <button onclick="moveToUsed(${randomIdea.id})" class="use-button">Использовать</button>
+  </div>
+`;
 }
 
 if (generateIdeaConfirmBtn) {
@@ -260,7 +280,6 @@ window.moveToUsed = function(id) {
         
         alert('Идея перемещена в использованные!');
         
-        // Обновляем интерфейс в зависимости от текущего раздела
         if (allIdeasContainer.classList.contains('active')) {
             renderAllLists();
         }
